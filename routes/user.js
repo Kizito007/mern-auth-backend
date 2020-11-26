@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
 
         //validate
         if (!email || !password || !passwordCheck)
-            return res.status(400).json({msg: "Not all fields have been entered."});
+            return res.status(400).send({msg: "Not all fields have been entered."});
 
         if (password.length < 5) 
             return res
@@ -72,12 +72,12 @@ router.post('/login', async (req, res) => {
                 .json({msg: "Invalid Credentials"})
 
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-        res.status(200).json({
+        res.status(200).send({
             token,
             user: {
                 id: user._id,
                 displayName: user.displayName,
-                email: user.email,
+                // email: user.email,
             }
         })
 
@@ -114,6 +114,14 @@ router.post('/tokenIsValid', async (req, res) => {
     } catch (err){
         res.status(500).send({error: err.message})
     }
+});
+
+router.get("/", auth, async (req, res) => {
+    const user = await User.findById(req.user)
+    res.json({
+        displayName: user.displayName,
+        id: user._id,
+    })
 });
 
 module.exports = router;

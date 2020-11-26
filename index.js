@@ -23,6 +23,7 @@ connection.once("open", () => {
 
 //setup routes
 app.use("/users", require("./routes/user"));
+app.use("/todos", require("./routes/todo"));
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
